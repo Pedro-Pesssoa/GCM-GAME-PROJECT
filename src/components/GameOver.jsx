@@ -1,61 +1,60 @@
-import React from 'react';
-import './GameOver.css';
+import React from "react";
+import "./GameOver.css";
 
 const GameOver = ({ 
-  score, 
   totalQuestions, 
   onRestartGame, 
   onBackToMenu,
-  isFaseCompleta = false,
   faseId = null,
-  fasesCompletas = [] // array com IDs das fases já completadas
+  acertouTodas = false,
+  acertos = 0
 }) => {
+  const percentual = Math.round((acertos / totalQuestions) * 100);
+  
   return (
     <div className="game-over-screen">
-      <h2>{isFaseCompleta ? `Fase ${faseId} Concluída! 🌟` : 'Jogo Finalizado! 🏆'}</h2>
+      {acertouTodas ? (
+        <h2>✅ Fase {faseId} Concluída com 100%! 🎉</h2>
+      ) : (
+        <h2>⚠️ Fase {faseId} Incompleta ({percentual}%)</h2>
+      )}
+      
       <div className="final-stats">
+        {acertouTodas ? (
+          <p className="mensagem-sucesso">
+            🏆 Parabéns! Você acertou todas as perguntas desta fase!
+          </p>
+        ) : (
+          <p className="mensagem-alerta">
+            💡 Continue tentando! Você precisa acertar 100% para concluir a fase.
+          </p>
+        )}
+        
         <p>
-          Sua pontuação: <strong>{score} pontos</strong>
+          Questões acertadas: <strong>{acertos} de {totalQuestions}</strong>
         </p>
         <p>
-          Questões acertadas:{" "}
-          <strong>
-            {score / 10} de {totalQuestions}
-          </strong>
-        </p>
-        <p>
-          Performance:{" "}
-          <strong>
-            {Math.round((score / (totalQuestions * 10)) * 100)}%
-          </strong>
+          Performance: <strong className={acertouTodas ? "destaque-sucesso" : "destaque-alerta"}>{percentual}%</strong>
         </p>
       </div>
+      
       <div className="game-over-actions">
-        {isFaseCompleta ? (
-          fasesCompletas?.includes(faseId) ? (
-            // Se a fase já foi completada, mostra apenas o botão de próxima fase
+        {acertouTodas ? (
+          <>
             <button onClick={onBackToMenu} className="menu-button">
-              Próxima Fase
+              ✓ Próxima Fase
             </button>
-          ) : (
-            // Se a fase ainda não foi completada, mostra ambos os botões
-            <>
-              <button onClick={onRestartGame} className="restart-button">
-                Tentar Novamente
-              </button>
-              <button onClick={onBackToMenu} className="menu-button">
-                Voltar às Fases
-              </button>
-            </>
-          )
+            <button onClick={onRestartGame} className="restart-button">
+              🔄 Refazer Fase
+            </button>
+          </>
         ) : (
-          // Quando o jogo estiver completo
           <>
             <button onClick={onRestartGame} className="restart-button">
-              Jogar Novamente
+              Tentar Novamente
             </button>
             <button onClick={onBackToMenu} className="menu-button">
-              Voltar ao Menu
+              Voltar às Fases
             </button>
           </>
         )}

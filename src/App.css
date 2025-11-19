@@ -41,13 +41,12 @@ body {
   text-align: center;
   width: 90%;
 
-   /* <-- alterações abaixo */
+  /* Altura fixa para manter consistência */
+  min-height: 600px;
+  height: auto;
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* filhos ocupam 100% da largura do container */
-  max-height: calc(100% - 200px); /* ajuste conforme altura do header/footer */
-  overflow: auto; /* permite rolagem quando o conteúdo ultrapassar */
-
+  align-items: stretch;
 }
 
 .quiz-container > * {

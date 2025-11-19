@@ -1,43 +1,70 @@
 import React, { useState } from "react";
 import "./FormularioCadastro.css";
+import { registerUser } from "../api";
 import OdsImage from "../assets/ods15vidaterrestre.png";
 import FolhagemBackground from "../assets/folhagem-e-plantas-exoticas.jpg";
 
 const FormularioCadastro = ({ SwitchLogin }) => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
-  const [senha2, setSenha2] = useState("");
-  const [termos, setTermos] = useState(false);
-  const [erro, setErro] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const validarEmail = (email) => /\S+@\S+\.\S+/.test(email);
+  const validateEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (!validarEmail(email)) {
-      setErro("E-mail inválido.");
+    if (!username || !email || !password || !confirmPassword) {
+      setError("Todos os campos são obrigatórios.");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Formato de e-mail inválido.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("As senhas não coincidem.");
+      return;
+    }
+    if (password.length < 8) {
+      setError("A senha deve ter no mínimo 8 caracteres.");
       return;
     }
 
-    if (!senha) {
-      setErro("A senha não pode ser vazia.");
-      return;
+    setIsLoading(true);
+    try {
+      await registerUser({ username, email, password });
+      setSuccess(true);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
-
-    if (senha !== senha2) {
-      setErro("As senhas não conferem.");
-      return;
-    }
-
-    if (!termos) {
-      setErro("É necessário concordar com os termos de privacidade.");
-      return;
-    }
-
-    setErro("");
-    alert("Cadastro realizado com sucesso!");
   };
+
+  if (success) {
+    return (
+      <div
+        className="form-container form-container-centered"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(${FolhagemBackground})`,
+        }}
+      >
+        <div className="form-content">
+          <h2 className="form-title">Cadastro realizado!</h2>
+          <p className="mensagem-sucesso">Sua conta foi criada com sucesso.</p>
+          <button onClick={SwitchLogin} className="form-button">
+            Ir para Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -46,59 +73,31 @@ const FormularioCadastro = ({ SwitchLogin }) => {
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url(${FolhagemBackground})`,
       }}
     >
-      {/* Imagem da ODS */}
       <div className="form-image">
         <img src={OdsImage} alt="ODS Vida Terrestre" />
       </div>
 
-      {/* Formulário */}
       <div className="form-wrapper">
-        <form onSubmit={handleSubmit} className="form-content">
-          <h2 className="form-title">Cadastro</h2>
+        <form className="form-content" onSubmit={handleSubmit}>
+          <h2 className="form-title">Criar Conta</h2>
 
           <div className="form-group">
-            <input
-              className="inputs"
-              type="email"
-              placeholder="Insira e-mail válido"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              className="inputs"
-              type="password"
-              placeholder="Digite sua senha"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
-            <input
-              className="inputs"
-              type="password"
-              placeholder="Digite novamente sua senha"
-              value={senha2}
-              onChange={(e) => setSenha2(e.target.value)}
-            />
+            <input className="inputs" type="text" placeholder="Nome" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <input className="inputs" type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input className="inputs" type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input className="inputs" type="password" placeholder="Confirmar Senha" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
           </div>
 
-          <div className="form-checkbox">
-            <input
-              type="checkbox"
-              checked={termos}
-              onChange={(e) => setTermos(e.target.checked)}
-            />
-            <label>
-              Concordo com os termos de privacidade.
-            </label>
-          </div>
+          {error && <div className="form-error">{error}</div>}
 
-          {erro && <div className="form-error">{erro}</div>}
-
-          <button type="submit" className="form-button">
-            Cadastrar
+          <button type="submit" className="form-button" disabled={isLoading}>
+            {isLoading ? "Criando..." : "Criar Conta"}
           </button>
 
           <div className="form-switch">
-            <label onClick={SwitchLogin}>Já possuo uma conta.</label>
+            <label onClick={SwitchLogin}>
+              Já tem uma conta? Faça login
+            </label>
           </div>
         </form>
       </div>

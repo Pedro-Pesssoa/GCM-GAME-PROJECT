@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Fases.css";
-import QuizDaFase from "./QuizDaFase";
 
 const QUESTOESPORFASE = 3;
 
@@ -36,18 +35,19 @@ const Fases = ({
           Floresta
         </button>
       </div>
-      {fases.map((fase) => (
-        <button
-          className={`fase-item ${
-            fasesCompletas.includes(fase.id) ? "completa" : ""
-          }`}
-          key={fase.id}
-          onClick={() => iniciarFase(fase.id)}
-        >
-          {fase.nome}
-          {fasesCompletas.includes(fase.id) && " ✓"}
-        </button>
-      ))}
+      
+      <div className="fases-lista">
+        {fases.map((fase) => (
+          <button
+            key={fase.id}
+            className={`fase-item ${fasesCompletas.includes(fase.id) ? "completa" : ""}`}
+            onClick={() => iniciarFase(fase.id)}
+          >
+            {fase.nome}
+            {fasesCompletas.includes(fase.id) && " ✓"}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

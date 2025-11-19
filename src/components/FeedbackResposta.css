@@ -1,0 +1,52 @@
+.feedback-screen {
+  /*position: fixed;*/
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 89, 45, 0.95);
+  padding: 20px;
+  text-align: center;
+  color: white;
+  /* border-top: 4px solid #00bf63; */
+  z-index: 1000;
+}
+
+.feedback-screen h2 {
+  margin: 0 0 15px 0;
+  color: white;
+  font-family: "Hero Bump";
+}
+
+.feedback-content {
+  margin: 15px 0;
+}
+
+.feedback-content p {
+  color: #f0f0f0;
+  margin: 10px 0;
+}
+
+.next-button {
+  font-family: "Hero Bump";
+  font-size: 16px;
+  height: 50px;
+  /* width: 150px; */
+  background-color: #8b4513;
+  border-width: 0;
+  border-bottom: 4px solid #572b0c;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.next-button:hover {
+  background-color: #572b0c;
+  border-bottom: 4px solid #8b4513;
+}
+
+.next-button:active {
+  transform: translateY(2px);
+}

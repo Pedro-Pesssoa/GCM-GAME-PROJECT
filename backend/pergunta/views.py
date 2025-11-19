@@ -1,5 +1,6 @@
 import random
-from rest_framework import viewsets, status, permissions
+
+from rest_framework import permissions, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -13,7 +14,6 @@ class IsCreateOrAuthenticated(permissions.BasePermission):
         if request.method in ["GET", "POST"]:
             return True
         return request.user and request.user.is_authenticated
-
 
 
 class PerguntaViewSet(viewsets.ModelViewSet):
@@ -30,7 +30,8 @@ class PerguntaViewSet(viewsets.ModelViewSet):
         Retorna uma pergunta aleatória do banco de dados.
         Se não houver perguntas, retorna 404.
         """
-        perguntas = list(Pergunta.objects.all())  # buscar diretamente, não usar self.queryset
+        # Buscar todas as perguntas
+        perguntas = list(Pergunta.objects.all())
         if not perguntas:
             return Response(
                 {"detail": "Nenhuma pergunta cadastrada"},

@@ -1,6 +1,11 @@
 .container-floresta {
   width: 100%;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
 .container-floresta h2 {
   font-family: "Hero Bump";
   color: #fff;
@@ -13,6 +18,37 @@
   margin: 0;
 }
 
+.alerta {
+  padding: 20px;
+  color: white;
+  border-radius: 10px;
+  margin: 10px 0;
+}
+
+.alerta h3 {
+  margin: 0;
+}
+
+.alerta p {
+  margin: 10px 0;
+}
+
+.alerta-perfeito {
+  background-color: #4caf50;
+}
+
+.alerta-vitoria {
+  background-color: #2196f3;
+}
+
+.estatisticas {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 16px 0;
+  border-radius: 12px;
+  background-color: #00592d;
+}
+
 .buttons-floresta {
   display: flex;
   padding: 10px;
@@ -21,14 +57,24 @@
 
 .buttons-floresta button {
   font-family: "Hero Bump";
-  width: 130px;
+  font-size: 16px;
+  min-width: 130px;
   background-color: #8b4513;
+  border-width: 0;
   border-bottom: 4px solid #572b0c;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  padding: 10px;
 }
 
 .buttons-floresta button:hover {
   background-color: #572b0c;
   border-bottom: 4px solid #8b4513;
+}
+
+.buttons-floresta button:active {
+  transform: translateY(2px);
 }
 
 .slots-container {

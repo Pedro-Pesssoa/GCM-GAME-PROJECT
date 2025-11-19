@@ -18,10 +18,7 @@
   font-weight: bold;
   color: #fff;
   text-decoration: none;
-}
-
-.logo.logo {
-  font-family: 'HeroBump';
+  font-family: "HeroBump";
   text-shadow: -2px -2px 4px #000;
 }
 
@@ -44,18 +41,20 @@
 }
 
 .menu-toggle {
-  display: none; /* Oculta o botão por padrão em telas grandes */
+  display: none;
   background: none;
   border: none;
-  color: #fff;
+  border-radius: 12px;
+  color: white;
   font-size: 2rem;
+  font-weight: 600;
+  padding: 10px;
   cursor: pointer;
 }
 
-/* Estilos Responsivos */
 @media (max-width: 768px) {
   .nav {
-    display: none; /* Oculta o menu em telas pequenas por padrão */
+    display: none;
     flex-direction: column;
     position: absolute;
     top: 60px; /* Ajuste para o tamanho do seu header */
@@ -67,7 +66,7 @@
   }
 
   .nav.open {
-    display: flex; /* Exibe o menu quando a classe 'open' está presente */
+    display: flex;
   }
   
   .nav-list {
@@ -76,6 +75,6 @@
   }
   
   .menu-toggle {
-    display: block; /* Exibe o botão em telas pequenas */
+    display: block;
   }
 }

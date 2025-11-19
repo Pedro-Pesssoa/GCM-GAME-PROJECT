@@ -1,10 +1,8 @@
-/* =======================
-   🖼️ Background e layout principal
-======================= */
 .form-container {
   display: flex;
   gap: 20px;
   width: 100%;
+  min-height: 550px;
   padding: 30px;
   border-radius: 15px;
   box-sizing: border-box;
@@ -13,9 +11,12 @@
   background-size: cover;
 }
 
-/* =======================
-   📷 Imagem lateral
-======================= */
+.form-container-centered {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
 .form-image {
   width: 50%;
   display: flex;
@@ -31,9 +32,6 @@
   border-radius: 12px;
 }
 
-/* =======================
-   📝 Formulário
-======================= */
 .form-wrapper {
   width: 50%;
   display: flex;
@@ -59,9 +57,6 @@
   margin: 0;
 }
 
-/* =======================
-   🧩 Inputs e Grupo
-======================= */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -93,34 +88,17 @@
   color: #fff;
 }
 
-/* =======================
-   ✅ Checkbox
-======================= */
-.form-checkbox {
-  display: flex;
-  align-items: center;
-  margin: 30px 0;
-}
-
-.form-checkbox label {
-  margin-left: 8px;
-  font-size: 14px;
-  font-weight: 800;
-  color: #fff;
-}
-
-/* =======================
-   ❌ Erro
-======================= */
 .form-error {
   color: #b22323;
   font-weight: 700;
   margin: 10px 0;
 }
 
-/* =======================
-   🔘 Botão
-======================= */
+.mensagem-sucesso {
+  color: white;
+  font-weight: bold;
+}
+
 .form-button {
   width: 100%;
   padding: 10px;
@@ -133,9 +111,20 @@
   cursor: pointer;
 }
 
-/* =======================
-   🔄 Alternar Login
-======================= */
+.form-button:hover:not(:disabled) {
+  background: #3a7bd5;
+  border-color: #0aa8c0;
+}
+
+.form-button:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+.form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .form-switch {
   margin: 30px 0;
   text-align: right;

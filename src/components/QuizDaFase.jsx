@@ -2,16 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import "./QuizDaFase.css";
 import FeedbackResposta from "./FeedbackResposta";
 import GameOver from "./GameOver";
+import { registrarFaseConcluida } from "../api";
 
-// Corrigido: Agora usa 'perguntas' como o nome da prop recebida
 const QuizDaFase = ({
   voltarFases,
   faseId,
   perguntas: perguntasRecebidas = [],
   onFaseConcluida,
 }) => {
-  // Renomeamos a prop recebida para 'perguntasRecebidas'
-  // e usamos 'perguntas' para o state.
   const [perguntas, setPerguntas] = useState([]);
   const [perguntaAtualIndex, setPerguntaAtualIndex] = useState(0);
   const [acertos, setAcertos] = useState(0);
@@ -22,43 +20,49 @@ const QuizDaFase = ({
     isCorrect: false,
   });
 
-  const finalizarFase = (acertosCount) => {
+  const acertosRef = useRef(0);
+
+  const finalizarFase = async (acertosCount) => {
     setFaseConcluida(true);
+    
+    try {
+      await registrarFaseConcluida(faseId, acertosCount, perguntas.length);
+    } catch (error) {
+      console.error("Erro ao registrar fase concluída:", error);
+    }
+    
     if (typeof onFaseConcluida === "function") {
       onFaseConcluida({
         acertos: acertosCount,
         total: perguntas.length,
         faseId,
+        acertouTodas: acertosCount === perguntas.length,
       });
     }
   };
 
   useEffect(() => {
-    // Se receber perguntas por prop, usa elas
-    if (perguntasRecebidas && perguntasRecebidas.length) {
-      setPerguntas(perguntasRecebidas); // Usa a prop renomeada
+    if (perguntasRecebidas && perguntasRecebidas.length && !faseConcluida) {
+      setPerguntas(perguntasRecebidas);
       setPerguntaAtualIndex(0);
       setAcertos(0);
-      setFaseConcluida(false);
+      acertosRef.current = 0;
       setFeedback({ show: false, message: "", isCorrect: false });
     }
-    // Dependência corrigida para a prop renomeada
-  }, [perguntasRecebidas, faseId]);
-
-  // O restante do seu código (handleResponder e renderização) está OK.
+  }, [perguntasRecebidas]);
 
   const timeoutRef = useRef(null);
 
-  const handleResponder = (respostaSelecionadaId) => {
-    // ... (código existente da handleResponder) ...
+  const handleResponder = async (respostaSelecionadaId) => {
     if (feedback.show) return;
 
     const perguntaAtual = perguntas[perguntaAtualIndex];
-    // Assumindo que 'correctAnswerId' está presente no seu objeto pergunta
     const isCorrect = respostaSelecionadaId === perguntaAtual.correctAnswerId;
 
     if (isCorrect) {
+      acertosRef.current += 1;
       setAcertos((prev) => prev + 1);
+      
       setFeedback({
         show: true,
         message: "Resposta Correta!",
@@ -74,7 +78,6 @@ const QuizDaFase = ({
   };
 
   const handleAvancarAgora = () => {
-    // Limpa o timeout, se houver (mantendo o código para segurança)
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
@@ -83,26 +86,19 @@ const QuizDaFase = ({
     const proximoIndex = perguntaAtualIndex + 1;
 
     if (proximoIndex < perguntas.length) {
-      // Se houver próxima pergunta, avança
       setPerguntaAtualIndex(proximoIndex);
       setFeedback({ show: false, message: "", isCorrect: false });
     } else {
-      // Se for a última pergunta, finaliza a fase com o score acumulado
       setFaseConcluida(true);
-
-      // ✅ CHAMA finalizarFase COM O VALOR ATUALIZADO DE ACERTOS
-      // O 'acertos' já foi incrementado em 'handleResponder' se a resposta anterior estava correta.
-      finalizarFase(acertos);
-
-      // O App.js vai receber o callback e navegar para GAME_OVER / FASES.
+      finalizarFase(acertosRef.current);
     }
 
-    // ✅ Oculta o feedback para a próxima pergunta
     setFeedback({ show: false, message: "", isCorrect: false });
   };
 
   if (perguntas.length === 0) return <div>Carregando fase ...</div>;
   if (faseConcluida) {
+    const acertouTodas = acertos === perguntas.length;
     return (
       <GameOver
         score={acertos * 10}
@@ -110,18 +106,21 @@ const QuizDaFase = ({
         onRestartGame={() => {
           setPerguntaAtualIndex(0);
           setAcertos(0);
+          acertosRef.current = 0; // Reseta o ref também
           setFaseConcluida(false);
           setFeedback({ show: false, message: "", isCorrect: false });
         }}
-        onBackToMenu={voltarFases}
-        isFaseCompleta={true}
+        onBackToMenu={() => voltarFases()}
+        isFaseCompleta={acertouTodas}
         faseId={faseId}
+        acertouTodas={acertouTodas}
+        acertos={acertos}
       />
     );
   }
 
   const perguntaAtual = perguntas[perguntaAtualIndex];
-  // ... (restante da renderização) ...
+  
   return (
     <div className="quiz-fase-container">
       <div className="quiz-title">
@@ -159,7 +158,7 @@ const QuizDaFase = ({
       {feedback.show && (
         <FeedbackResposta
           isCorrect={feedback.isCorrect}
-          explanation={perguntaAtual?.explanation}
+          explicacao={perguntaAtual?.explanation}
           score={null}
           onNext={handleAvancarAgora}
           isLast={perguntaAtualIndex === perguntas.length - 1}

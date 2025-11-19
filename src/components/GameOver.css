@@ -1,10 +1,27 @@
 .game-over-screen {
   text-align: center;
   padding: 2rem;
+  min-height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .final-stats {
   margin: 2rem 0;
+}
+
+.mensagem-sucesso,
+.mensagem-alerta {
+  color: #bf6300;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.destaque-sucesso,
+.destaque-alerta {
+  color: #bf6300;
 }
 
 .game-over-actions {
@@ -15,26 +32,25 @@
 
 .restart-button,
 .menu-button {
-  padding: 0.8rem 1.5rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.restart-button {
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-}
-
-.menu-button {
   font-family: "Hero Bump";
-  border-radius: 8px;
-  background-color: #8b4513;
+  font-size: 16px;
+  padding: 10px;
+  border-width: 0;
   border-bottom: 4px solid #572b0c;
+  border-radius: 12px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  background-color: #8b4513;
 }
 
-.menu-button:hover:not(:disabled) {
+.restart-button:hover,
+.menu-button:hover {
   background-color: #572b0c;
   border-bottom: 4px solid #8b4513;
+}
+
+.restart-button:active,
+.menu-button:active {
+  transform: translateY(2px);
 }

@@ -1,15 +1,50 @@
 import React from "react";
 import "./Floresta.css";
-
 import imagemArvore from "../assets/pngwing.png";
 import imagemTerreno from "../assets/terratexture.png";
 
-const Floresta = ({ arvoresAtuais, metaDeArvores , voltarMenu, irFases}) => {
+const Floresta = ({ 
+  arvoresAtuais, 
+  metaDeArvores, 
+  voltarMenu, 
+  irFases,
+  totalAcertos = 0,
+  totalErros = 0
+}) => {
   const slotsDaFloresta = Array.from({ length: metaDeArvores });
+  const metaVitoria = Math.floor(metaDeArvores * 0.8);
+  const progressoPercentual = Math.round((arvoresAtuais / metaDeArvores) * 100);
+  
+  const atingiuVitoria = arvoresAtuais >= metaVitoria;
+  const completouTudo = arvoresAtuais >= metaDeArvores;
+  
+  const acertosReais = arvoresAtuais;
+  const taxaAcerto = acertosReais + totalErros > 0 
+    ? Math.round((acertosReais / (acertosReais + totalErros)) * 100) 
+    : 0;
+  
   return (
     <div className="container-floresta">
       <h2>Sua Floresta</h2>
-      <p>Veja seu progresso! Cada árvore representa seu esforço.</p>
+      
+      {completouTudo && (
+        <div className="alerta alerta-perfeito">
+          <h3>🏆 PERFEITO! Você completou 100% da floresta!</h3>
+        </div>
+      )}
+      
+      {atingiuVitoria && !completouTudo && (
+        <div className="alerta alerta-vitoria">
+          <h3>🎉 VITÓRIA! Você atingiu {progressoPercentual}% da floresta!</h3>
+          <p>Continue jogando para completar os 100%!</p>
+        </div>
+      )}
+      
+      <div className="estatisticas">
+        <p>Árvores Plantadas: {arvoresAtuais} / {metaDeArvores} ({progressoPercentual}%)</p>
+        <p>Meta de Vitória: {metaVitoria} árvores (80%) {atingiuVitoria ? '✅' : '🎯'}</p>
+        <p>Acertos: {acertosReais} | Erros: {totalErros} | Taxa: {taxaAcerto}%</p>
+      </div>
 
       <div className="buttons-floresta">
         <button onClick={voltarMenu}>Voltar Menu</button>
@@ -17,23 +52,14 @@ const Floresta = ({ arvoresAtuais, metaDeArvores , voltarMenu, irFases}) => {
       </div>
 
       <div className="slots-container">
-        {slotsDaFloresta.map((_, index) => {
-          // Se o índice for menor que o número de árvores, mostra a árvore plantada
-          if (index < arvoresAtuais) {
-            return (
-              <div key={index} className="slot-arvore">
-                <img src={imagemArvore} alt="Árvore Plantada" />
-              </div>
-            );
-          } else {
-            // Senão, mostra o terreno vazio
-            return (
-              <div key={index} className="slot-arvore">
-                <img src={imagemTerreno} alt="Terreno Vazio" />
-              </div>
-            );
-          }
-        })}
+        {slotsDaFloresta.map((_, index) => (
+          <div key={index} className="slot-arvore">
+            <img 
+              src={index < arvoresAtuais ? imagemArvore : imagemTerreno} 
+              alt={index < arvoresAtuais ? "Árvore Plantada" : "Terreno Vazio"} 
+            />
+          </div>
+        ))}
       </div>
     </div>
   );

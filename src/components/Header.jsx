@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import './Header.css';
+import React, { useState } from "react";
+import "./Header.css";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,11 +13,16 @@ const Header = () => {
       <div className="container">
         <a href="/" className="logo">QuizPlanet</a>
         
-        <button className="menu-toggle" onClick={handleMenuToggle}>
+        <button 
+          className="menu-toggle" 
+          onClick={handleMenuToggle}
+          aria-label="Toggle menu"
+          aria-expanded={isMenuOpen}
+        >
           ☰
         </button>
 
-        <nav className={`nav ${isMenuOpen ? 'open' : ''}`}>
+        <nav className={`nav ${isMenuOpen ? "open" : ""}`}>
           <ul className="nav-list">
             <li><a href="/#jogo">Jogo</a></li>
             <li><a href="/#sobre-o-jogo">Sobre o Jogo</a></li>

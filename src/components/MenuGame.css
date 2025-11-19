@@ -1,11 +1,12 @@
 .container-menu {
   box-sizing: border-box;
   padding: 1rem;
-  height: 100%;
+  min-height: 550px;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 15px;
   border-radius: 15px;
   background-color: azure;
@@ -21,6 +22,13 @@
   height: 100%;
 }
 
+.logo-menu img {
+  width: 50%;
+  height: 50%;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
 .menu {
   box-sizing: border-box;
   display: flex;
@@ -29,6 +37,11 @@
   gap: 15px;
   color: #eee;
   font-family: Hero Bump;
+}
+
+.mensagem-info {
+  padding: 20px;
+  text-align: center;
 }
 
 .container-menu h2 {
@@ -42,12 +55,30 @@
   margin: 0;
   padding: 10px;
   background-color: saddlebrown;
-  border-radius: 8px;
+  border-width: 0;
   border-bottom: 4px solid #572b0c;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.menu h3:hover{
+.menu h3:hover {
   background-color: #572b0c;
   border-bottom: 4px solid #8b4513;
+}
+
+.menu h3:active {
+  transform: translateY(2px);
+}
+
+.menu h3.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.menu h3.disabled:hover {
+  background-color: saddlebrown;
+  border-bottom: 4px solid #572b0c;
 }

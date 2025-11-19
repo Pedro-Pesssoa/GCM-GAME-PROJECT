@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./FormularioLogin.css";
+import { loginUser } from "../api";
 import GoogleIcon from "../assets/Google.svg";
 import FacebookIcon from "../assets/Facebook.svg";
 import OdsImage from "../assets/ods15vidaterrestre.png";
@@ -9,21 +10,34 @@ const FormularioLogin = ({ SwitchRegister, handleStartGame }) => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const validarEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setErro("");
+
     if (!validarEmail(email)) {
       setErro("E-mail inválido.");
       return;
     }
     if (!senha) {
-      setErro("A senha não pode ser vazia.");
+      setErro("Por favor, insira sua senha.");
       return;
     }
-    setErro("");
-    alert(`Tentativa de Login com E-mail: ${email}`);
+
+    setIsLoading(true);
+    try {
+      const data = await loginUser(email, senha);
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+      handleStartGame();
+    } catch (error) {
+      setErro(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -64,12 +78,8 @@ const FormularioLogin = ({ SwitchRegister, handleStartGame }) => {
 
           {erro && <div className="login-error">{erro}</div>}
 
-          <button
-            type="submit"
-            className="login-button"
-            onClick={handleStartGame}
-          >
-            Entrar
+          <button type="submit" className="login-button" disabled={isLoading}>
+            {isLoading ? "Entrando..." : "Entrar"}
           </button>
 
           <div className="login-social">
@@ -86,11 +96,7 @@ const FormularioLogin = ({ SwitchRegister, handleStartGame }) => {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="register-button"
-              onClick={SwitchRegister}
-            >
+            <button type="button" className="register-button" onClick={SwitchRegister}>
               Criar uma conta
             </button>
           </div>

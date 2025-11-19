@@ -1,4 +1,5 @@
 import React from "react";
+import "./FeedbackResposta.css";
 
 const FeedbackResposta = ({ isCorrect, explicacao, score, onNext, isLast }) => {
   return (
@@ -10,7 +11,9 @@ const FeedbackResposta = ({ isCorrect, explicacao, score, onNext, isLast }) => {
             <strong>Explicação:</strong> {explicacao}
           </p>
         )}
-        {typeof score === "number" && <p>Sua pontuação atual: {score} pontos</p>}
+        {typeof score === "number" && (
+          <p>Sua pontuação atual: {score} pontos</p>
+        )}
       </div>
       <button onClick={onNext} className="next-button">
         {isLast ? "Ver Resultado Final" : "Próxima Questão"}

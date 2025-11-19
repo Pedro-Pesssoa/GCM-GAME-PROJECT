@@ -7,11 +7,13 @@ const TELAS = {
   CARREGAR_JOGO: "carregar_jogo",
 };
 
-const MenuGame = ({ novoJogo, telaLogin }) => {
+const MenuGame = ({ novoJogo, carregarJogo, telaLogin, jogoIniciado }) => {
   const [telaAtual, setTelaAtual] = useState(TELAS.PRINCIPAL);
 
   const handleCarregarJogo = () => {
-    setTelaAtual(TELAS.CARREGAR_JOGO);
+    if (jogoIniciado && carregarJogo) {
+      carregarJogo();
+    }
   };
 
   const handleVoltarPrincipal = () => {
@@ -22,20 +24,22 @@ const MenuGame = ({ novoJogo, telaLogin }) => {
     <div className="menu">
       <h2>Menu</h2>
       <h3 onClick={novoJogo}>Novo Jogo</h3>
-      <h3 onClick={handleCarregarJogo}>Carregar Jogo</h3>
+      <h3 
+        onClick={handleCarregarJogo}
+        className={!jogoIniciado ? "disabled" : ""}
+      >
+        Carregar Jogo
+      </h3>
       <h3 onClick={telaLogin}>Sair</h3>
     </div>
   );
 
   const CarregarJogo = (
     <div className="menu">
-      <h2>Carregar Jogo</h2>
-      <h3 onClick={() => console.log("Floresta Nível 3 - 10/10/2025")}>
-        Espaço I
-      </h3>
-      <h3 onClick={() => console.log("Floresta Nível 3 - 10/10/2025")}>
-        Espaço II
-      </h3>
+      <h2>Em Desenvolvimento</h2>
+      <p className="mensagem-info">
+        A funcionalidade de múltiplos slots de salvamento está em desenvolvimento.
+      </p>
       <h3 onClick={handleVoltarPrincipal}>Voltar</h3>
     </div>
   );
@@ -44,10 +48,8 @@ const MenuGame = ({ novoJogo, telaLogin }) => {
     switch (telaAtual) {
       case TELAS.PRINCIPAL:
         return MenuPrincipal;
-
       case TELAS.CARREGAR_JOGO:
         return CarregarJogo;
-
       default:
         return MenuPrincipal;
     }
@@ -56,18 +58,9 @@ const MenuGame = ({ novoJogo, telaLogin }) => {
   return (
     <div className="container-menu">
       <div className="logo-menu">
-        <img
-          src={OdsImage}
-          alt="ODS Vida Terrestre"
-          style={{
-            width: "50%",
-            height: "50%",
-            objectFit: "contain",
-            borderRadius: "12px",
-          }}
-        />
+        <img src={OdsImage} alt="ODS Vida Terrestre" />
       </div>
-      {renderizarTela()};
+      {renderizarTela()}
     </div>
   );
 };

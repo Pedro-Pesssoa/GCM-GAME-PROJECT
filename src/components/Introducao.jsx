@@ -1,3 +1,4 @@
+import React from "react";
 import "./Introducao.css";
 import TerraTexture from "../assets/terratexture.png";
 import Arvore from "../assets/pngwing.png";
@@ -17,17 +18,17 @@ const Introducao = ({ Playing }) => {
             quantidade de respostas corretas.
           </p>
         </div>
-        <img src={TerraTexture} alt="" />
+        <img src={TerraTexture} alt="Textura de Terra" />
       </div>
+
       <div className="container-descricao-2">
-        <img src={Arvore} alt="" />
+        <img src={Arvore} alt="Árvore" />
         <div className="descricao-game">
           <p>
             As perguntas serão apresentadas em formato de <strong>Verdadeiro/Falso</strong> ou
             com 4 alternativas. Use seu conhecimento sobre a conservação, o
             combate à desertificação e a proteção da biodiversidade para
-            avançar. Pronto para aceitar o desafio e provar que o conhecimento
-            salva o planeta? Clique em 'Iniciar' e comece a plantar!
+            avançar.
           </p>
           <p>
             Lembre-se: Seu progresso será salvo automaticamente a cada ação. Ao

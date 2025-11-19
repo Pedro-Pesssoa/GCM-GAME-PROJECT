@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // Componentes
 import Header from "./components/Header";
 import CardDev from "./components/CardDev";
@@ -13,11 +13,10 @@ import QuizDaFase from "./components/QuizDaFase";
 import FeedbackResposta from "./components/FeedbackResposta";
 import GameOver from "./components/GameOver";
 
-// Dados
-import perguntas from "./data/perguntas";
+// API
+import { getPerguntas, getProgresso, registrarAcerto, registrarErro, resetarProgresso } from "./api";
 
 // Constantes
-const mockData = perguntas;
 const QUESTOESPORFASE = 3;
 
 // Definição das telas do jogo
@@ -42,26 +41,86 @@ function App() {
   const [currentFaseId, setCurrentFaseId] = useState(1);
   
   // ------------------------------------
-  // 2. Estados do Quiz (Legado/Playing)
+  // 2. Estados de Perguntas (carregadas da API)
+  // ------------------------------------
+  const [perguntas, setPerguntas] = useState([]);
+  const [isLoadingPerguntas, setIsLoadingPerguntas] = useState(true);
+  const [errorPerguntas, setErrorPerguntas] = useState(null);
+  
+  // ------------------------------------
+  // 2.1. Estados de Progresso (carregados da API)
+  // ------------------------------------
+  const [progresso, setProgresso] = useState(null);
+  const [isLoadingProgresso, setIsLoadingProgresso] = useState(false);
+  
+  // ------------------------------------
+  // 3. Estados do Quiz (Legado/Playing)
   // ------------------------------------
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isCorrect, setIsCorrect] = useState(null); // Feedback da resposta
 
   // ------------------------------------
-  // 3. Estados de Pontuação e Progresso
+  // 4. Estados de Pontuação e Progresso
   // ------------------------------------
   const [score, setScore] = useState(0);
   const [fasesCompletas, setFasesCompletas] = useState([]);
   const [jogoCompleto, setJogoCompleto] = useState(false);
 
   // ------------------------------------
-  // 4. Variáveis Derivadas (Opcional, mas útil para clareza)
+  // 5. Carregamento das Perguntas da API
   // ------------------------------------
+  useEffect(() => {
+    const carregarPerguntas = async () => {
+      try {
+        setIsLoadingPerguntas(true);
+        const data = await getPerguntas();
+        setPerguntas(data);
+        setErrorPerguntas(null);
+      } catch (error) {
+        console.error("Erro ao carregar perguntas:", error);
+        setErrorPerguntas(error.message);
+      } finally {
+        setIsLoadingPerguntas(false);
+      }
+    };
+
+    carregarPerguntas();
+  }, []);
+
+  // ------------------------------------
+  // 5.1. Carregamento do Progresso após Login
+  // ------------------------------------
+  const carregarProgresso = async () => {
+    try {
+      setIsLoadingProgresso(true);
+      const data = await getProgresso();
+      setProgresso(data);
+      // Atualiza estados locais com dados do backend
+      setScore(data.total_acertos * 10);
+      
+      // Sincroniza fases completas com backend
+      if (data.fases_concluidas) {
+        const fasesIds = Object.keys(data.fases_concluidas).map(id => parseInt(id));
+        setFasesCompletas(fasesIds);
+      }
+      return data;
+    } catch (error) {
+      console.error("Erro ao carregar progresso:", error);
+      // Se não existir progresso, será criado no primeiro acerto/erro
+    } finally {
+      setIsLoadingProgresso(false);
+    }
+  };
+
+  // ------------------------------------
+  // 6. Variáveis Derivadas
+  // ------------------------------------
+  const mockData = perguntas; // Mantém compatibilidade com código existente
   const currentQuestion = mockData[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === mockData.length - 1;
 
   // ------------------------------------
-  // 5. Funções de Lógica do Jogo
+  // 7. Funções de Lógica do Jogo
   // ------------------------------------
 
   /**
@@ -80,26 +139,29 @@ function App() {
    * Atualiza a pontuação, o progresso das fases e a navegação.
    * @param {{acertos: number, faseId: number}} res - Objeto com acertos e ID da fase.
    */
-  const handleFaseConcluida = ({ acertos, total, faseId }) => {
-    // Atualiza Score apenas se a fase não foi completada ainda
-    if (!fasesCompletas.includes(faseId) && acertos > total / 2) {
-      setScore((prev) => prev + acertos * 10);
-      
-      // Registra Fase Completa
+  const handleFaseConcluida = async ({ acertos, total, faseId }) => {
+    // Verifica se acertou TODAS as perguntas da fase (100%)
+    const acertouTodas = acertos === total;
+    
+    // Marca fase como completa APENAS se acertar 100%
+    if (acertouTodas && !fasesCompletas.includes(faseId)) {
       const novasFasesCompletas = [...fasesCompletas, faseId];
       setFasesCompletas(novasFasesCompletas);
 
       // Número total de fases
       const totalFases = Math.ceil(perguntas.length / QUESTOESPORFASE);
 
-      // Verifica se completou o Jogo
+      // Verifica se completou o Jogo (todas as fases com 100%)
       if (novasFasesCompletas.length === totalFases) {
         setJogoCompleto(true);
       }
     }
 
-    // Move para a tela de GameOver sempre
-    setCurrentScreen(GAME_SCREENS.GAME_OVER);
+    // Recarrega progresso do backend após fase concluída
+    await carregarProgresso();
+
+    // NÃO muda a tela - QuizDaFase já mostra o GameOver com os dados corretos
+    // setCurrentScreen(GAME_SCREENS.GAME_OVER);
   };
 
   // Funções de resposta do modo 'Playing' (antigo) - Mantidas para compatibilidade.
@@ -124,7 +186,7 @@ function App() {
   };
 
   // ------------------------------------
-  // 6. Funções de Navegação (Handlers)
+  // 8. Funções de Navegação (Handlers)
   // ------------------------------------
 
   const resetState = () => {
@@ -138,8 +200,9 @@ function App() {
     setCurrentScreen(GAME_SCREENS.LOGIN);
   };
 
-  const handleBackToMenu = () => {
+  const handleBackToMenu = async () => {
     resetState();
+    await carregarProgresso();
     setCurrentScreen(GAME_SCREENS.MENU);
   };
 
@@ -148,13 +211,46 @@ function App() {
     setCurrentScreen(GAME_SCREENS.CREATE_ACCOUNT);
   };
 
+  const handleNovoJogo = async () => {
+    resetState();
+    try {
+      // Reseta o progresso no backend
+      await resetarProgresso();
+      // Reseta estados locais
+      setFasesCompletas([]);
+      setJogoCompleto(false);
+      setProgresso(null);
+    } catch (error) {
+      console.error("Erro ao resetar progresso:", error);
+    }
+    setCurrentScreen(GAME_SCREENS.INTRODUCAO);
+  };
+
+  const handleCarregarJogo = async () => {
+    resetState();
+    try {
+      // Carrega o progresso existente e usa o retorno para decidir fluxo
+      const data = await carregarProgresso();
+      // Se não houver progresso ou o jogo não foi iniciado, não faz nada
+      if (!data || data.jogo_iniciado !== true) {
+        return;
+      }
+
+      // Se já iniciou anteriormente, vai direto para a Floresta
+      setCurrentScreen(GAME_SCREENS.FLORESTA);
+    } catch (error) {
+      console.error("Erro ao carregar jogo:", error);
+    }
+  };
+
   const handleIntroducao = () => {
     resetState();
     setCurrentScreen(GAME_SCREENS.INTRODUCAO);
   };
 
-  const handleFloresta = () => {
+  const handleFloresta = async () => {
     resetState();
+    await carregarProgresso();
     setCurrentScreen(GAME_SCREENS.FLORESTA);
   };
 
@@ -196,8 +292,42 @@ function App() {
   };
 
   // ------------------------------------
-  // 7. Renderização Condicional
+  // 9. Renderização Condicional
   // ------------------------------------
+  
+  // Exibe loading enquanto carrega perguntas
+  if (isLoadingPerguntas) {
+    return (
+      <div className="page">
+        <Header />
+        <div id="jogo" className="quiz-container">
+          <div style={{ textAlign: 'center', padding: '50px' }}>
+            <h2>Carregando perguntas...</h2>
+            <p>Aguarde enquanto carregamos o conteúdo do jogo.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Exibe erro se houver problema ao carregar
+  if (errorPerguntas) {
+    return (
+      <div className="page">
+        <Header />
+        <div id="jogo" className="quiz-container">
+          <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+            <h2>Erro ao carregar perguntas</h2>
+            <p>{errorPerguntas}</p>
+            <button onClick={() => window.location.reload()}>
+              Tentar Novamente
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const renderGameContent = () => {
     switch (currentScreen) {
       case GAME_SCREENS.LOGIN:
@@ -213,7 +343,12 @@ function App() {
 
       case GAME_SCREENS.MENU:
         return (
-          <MenuGame novoJogo={handleIntroducao} telaLogin={handleBackToLogin} />
+          <MenuGame 
+            novoJogo={handleNovoJogo} 
+            carregarJogo={handleCarregarJogo}
+            telaLogin={handleBackToLogin}
+            jogoIniciado={progresso?.jogo_iniciado || false}
+          />
         );
 
       case GAME_SCREENS.INTRODUCAO:
@@ -222,10 +357,12 @@ function App() {
       case GAME_SCREENS.FLORESTA:
         return (
           <Floresta
-            arvoresAtuais={score / 10} // Usa o número de fases completas como árvores
-            metaDeArvores={perguntas.length} // Total de fases como meta
+            arvoresAtuais={progresso?.arvores || 0}
+            metaDeArvores={progresso?.meta_arvores || 25}
             voltarMenu={handleBackToMenu}
             irFases={handleFases}
+            totalAcertos={progresso?.total_acertos || 0}
+            totalErros={progresso?.total_erros || 0}
           />
         );
 
@@ -307,7 +444,7 @@ function App() {
   };
 
   // ------------------------------------
-  // 8. Template Principal
+  // 10. Template Principal
   // ------------------------------------
   return (
     <div className="page">
