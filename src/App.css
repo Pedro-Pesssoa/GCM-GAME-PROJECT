@@ -56,8 +56,7 @@ body {
   overflow-wrap: break-word;
 }
 
-.menu-screen h1,
-.playing-screen h1 {
+.menu-screen h1 {
   font-size: clamp(1.5rem, 6vw, 4rem);
 }
 
@@ -176,13 +175,4 @@ body {
   color: #fff;
   font-family: "HeroBump";
   font-size: 128px;
-}
-
-/* ==========================
-   🕹️ Playing Screen
-========================== */
-.playing-screen {
-  background-image: url("./assets/grassbackground.jpg");
-  background-repeat: repeat;
-  background-size: 105px;
 }

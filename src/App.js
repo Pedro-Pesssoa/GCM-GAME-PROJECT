@@ -5,12 +5,10 @@ import CardDev from "./components/CardDev";
 import FormularioCadastro from "./components/FormularioCadastro";
 import FormularioLogin from "./components/FormularioLogin";
 import MenuGame from "./components/MenuGame";
-import Playing from "./components/Playing";
 import Introducao from "./components/Introducao";
 import Floresta from "./components/Floresta";
 import Fases from "./components/Fases";
 import QuizDaFase from "./components/QuizDaFase";
-import FeedbackResposta from "./components/FeedbackResposta";
 import GameOver from "./components/GameOver";
 
 // API
@@ -23,12 +21,10 @@ const QUESTOESPORFASE = 3;
 const GAME_SCREENS = {
   LOGIN: "login",
   MENU: "menu",
-  PLAYING: "playing",
   INTRODUCAO: "introducao",
   FLORESTA: "floresta",
   FASES: "fases",
   QUIZ: "quiz",
-  FEEDBACK: "feedback",
   GAME_OVER: "game_over",
   CREATE_ACCOUNT: "create_account",
 };
@@ -52,15 +48,9 @@ function App() {
   // ------------------------------------
   const [progresso, setProgresso] = useState(null);
   const [isLoadingProgresso, setIsLoadingProgresso] = useState(false);
-  
-  // ------------------------------------
-  // 3. Estados do Quiz (Legado/Playing)
-  // ------------------------------------
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [isCorrect, setIsCorrect] = useState(null); // Feedback da resposta
 
   // ------------------------------------
-  // 4. Estados de Pontuação e Progresso
+  // 3. Estados de Pontuação e Progresso
   // ------------------------------------
   const [score, setScore] = useState(0);
   const [fasesCompletas, setFasesCompletas] = useState([]);
@@ -116,8 +106,6 @@ function App() {
   // 6. Variáveis Derivadas
   // ------------------------------------
   const mockData = perguntas; // Mantém compatibilidade com código existente
-  const currentQuestion = mockData[currentQuestionIndex];
-  const isLastQuestion = currentQuestionIndex === mockData.length - 1;
 
   // ------------------------------------
   // 7. Funções de Lógica do Jogo
@@ -164,35 +152,12 @@ function App() {
     // setCurrentScreen(GAME_SCREENS.GAME_OVER);
   };
 
-  // Funções de resposta do modo 'Playing' (antigo) - Mantidas para compatibilidade.
-  const handleAnswer = (selectedAnswerId) => {
-    const correct = selectedAnswerId === currentQuestion.correctAnswerId;
-    setIsCorrect(correct);
-    setCurrentScreen(GAME_SCREENS.FEEDBACK);
-
-    if (correct) {
-      setScore(score + 10);
-    }
-  };
-
-  const handleNextQuestion = () => {
-    if (isLastQuestion) {
-      setCurrentScreen(GAME_SCREENS.GAME_OVER);
-    } else {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setCurrentScreen(GAME_SCREENS.PLAYING);
-    }
-    setIsCorrect(null);
-  };
-
   // ------------------------------------
   // 8. Funções de Navegação (Handlers)
   // ------------------------------------
 
   const resetState = () => {
-    setCurrentQuestionIndex(0);
     setScore(0);
-    setIsCorrect(null);
   };
 
   const handleBackToLogin = () => {
@@ -413,28 +378,6 @@ function App() {
             faseId={currentFaseId}
             mensagem={gameOverMessage}
             fasesCompletas={fasesCompletas}
-          />
-        );
-
-      case GAME_SCREENS.PLAYING:
-      case GAME_SCREENS.FEEDBACK:
-        // Renderiza o modo antigo/legado se necessário (embora QuizDaFase substitua isso)
-        return currentScreen === GAME_SCREENS.PLAYING ? (
-          <Playing
-            handleBackToMenu={handleBackToMenu}
-            currentQuestion={currentQuestion}
-            currentQuestionIndex={currentQuestionIndex}
-            score={score}
-            mockData={mockData}
-            handleAnswer={handleAnswer}
-          />
-        ) : (
-          <FeedbackResposta
-            isCorrect={isCorrect}
-            explicacao={currentQuestion?.explanation}
-            score={score}
-            onNext={handleNextQuestion}
-            isLast={isLastQuestion}
           />
         );
 
