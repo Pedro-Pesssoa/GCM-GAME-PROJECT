@@ -60,6 +60,26 @@ O jogo implementa os seguintes Requisitos Funcionais (RFs) essenciais:
 
 ### 🚀 Como Executar o Projeto
 
+> 📘 **Para instruções detalhadas passo-a-passo, consulte o [SETUP.md](SETUP.md)**
+
+#### Instalação Rápida (Recomendado)
+
+**Linux/macOS**:
+```bash
+bash install.sh
+```
+
+**Windows**:
+```bash
+install.bat
+```
+
+Esses scripts instalarão automaticamente todas as dependências do frontend e backend.
+
+---
+
+#### Instalação Manual
+
 Para rodar o projeto localmente, siga os passos abaixo para configurar o backend (Python) e o frontend (React).
 
 1. Configuração do Backend (Python/Django)
@@ -97,6 +117,8 @@ Para rodar o projeto localmente, siga os passos abaixo para configurar o backend
       python manage.py migrate
       python manage.py runserver
       ```
+      
+      > 💡 As perguntas do quiz são inseridas automaticamente durante o `migrate`!
 
    O backend estará disponível em http://localhost:8000
 
@@ -107,17 +129,93 @@ Para rodar o projeto localmente, siga os passos abaixo para configurar o backend
         cd GCM-GAME-PROJECT
         ```
 
-    2. Instale as dependencias:
+    2. Instale as dependências do Node.js:
         ```bash
         npm install
         ```
+        
+        **Observação**: Este comando lê o arquivo `package.json` e instala todas as dependências necessárias automaticamente, similar ao `pip install -r requirements.txt` do Python.
 
     3. Execute o servidor de desenvolvimento:
-        ```
+        ```bash
         npm start
         ```
 
         A aplicação React será aberta automaticamente no seu navegador, geralmente em http://localhost:3000.
+
+---
+
+### 🔧 Solução de Problemas Comuns
+
+#### Frontend não inicia ou faltam dependências
+
+Se ao executar `npm start` você receber erros sobre módulos faltando:
+
+1. **Limpe o cache do npm e reinstale**:
+   ```bash
+   rm -rf node_modules package-lock.json  # Linux/macOS
+   # OU
+   rmdir /s node_modules & del package-lock.json  # Windows
+   
+   npm install
+   ```
+
+2. **Verifique a versão do Node.js**:
+   ```bash
+   node --version
+   npm --version
+   ```
+   Recomendado: Node.js v18 ou superior
+
+3. **Se houver erros de permissão (Linux/macOS)**:
+   ```bash
+   sudo npm install -g npm@latest
+   ```
+
+#### Backend não conecta ao banco de dados
+
+1. Certifique-se de que as migrações foram aplicadas:
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+2. Crie um superusuário para acessar o admin do Django:
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+#### CORS - Problema de comunicação Frontend/Backend
+
+Se o frontend não conseguir se comunicar com o backend, verifique:
+- Backend rodando em `http://localhost:8000`
+- Frontend rodando em `http://localhost:3000`
+- Configurações de CORS no arquivo `backend/core/settings.py`
+
+---
+
+### 📦 Estrutura de Dependências
+
+**Frontend (package.json)**:
+- React 19.1.1
+- React Icons 5.5.0
+- Axios 1.13.2
+- Testing Library
+
+**Backend (requirements.txt)**:
+- Django
+- Django REST Framework
+- Django CORS Headers
+- Outras dependências Python
+
+Para atualizar dependências:
+```bash
+# Frontend
+npm update
+
+# Backend
+pip install --upgrade -r requirements.txt
+```
 
 
 ---

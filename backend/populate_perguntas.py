@@ -1,5 +1,18 @@
 """
 Script para popular o banco de dados com as perguntas do quiz.
+
+⚠️ NOTA IMPORTANTE:
+Este script é OPCIONAL e mantido apenas para referência ou re-população manual.
+As perguntas são inseridas AUTOMATICAMENTE quando você executa:
+    python manage.py migrate
+
+A migração 0003_popular_perguntas.py já insere todas as 25 perguntas no banco.
+
+Use este script apenas se:
+- Quiser limpar e re-popular o banco manualmente
+- Precisar adicionar perguntas em um banco já existente
+- Estiver debugando problemas com as perguntas
+
 Execute com: python populate_perguntas.py
 """
 
