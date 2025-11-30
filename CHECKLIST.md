@@ -168,7 +168,6 @@ Verifique se os seguintes arquivos/pastas existem:
 - [ ] `node_modules/` (após npm install)
 - [ ] `.gitignore`
 - [ ] `README.md`
-- [ ] `SETUP.md`
 - [ ] `install.sh` (Linux/macOS)
 - [ ] `install.bat` (Windows)
 
@@ -238,8 +237,7 @@ Marque todos os itens acima. Se tudo estiver ✅, sua instalação está complet
 **Total de checks**: ___ de 50+
 
 Se houver problemas, consulte:
-- 📘 [SETUP.md](SETUP.md) - Guia detalhado
-- 🔧 [README.md](README.md) - Seção de troubleshooting
+- 📘 [README.md](README.md) - Guia completo e troubleshooting
 - 🆘 [Issues do GitHub](https://github.com/jeffersonbg/GCM-GAME-PROJECT/issues)
 
 ---
