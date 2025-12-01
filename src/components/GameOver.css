@@ -14,7 +14,7 @@
 
 .mensagem-sucesso,
 .mensagem-alerta {
-  color: #bf6300;
+  color: #ccfd72;
   font-weight: bold;
   font-size: 1.5em;
 }
@@ -33,7 +33,7 @@
 .restart-button,
 .menu-button {
   font-family: "Hero Bump";
-  font-size: 16px;
+  font-size: 24px;
   padding: 10px;
   border-width: 0;
   border-bottom: 4px solid #572b0c;

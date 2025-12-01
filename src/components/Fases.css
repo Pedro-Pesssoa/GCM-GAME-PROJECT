@@ -38,6 +38,7 @@
 
 .btn {
   font-family: "Hero Bump";
+  font-size: 24px;
   width: 150px;
   height: 50px;
   background-color: #8b4513;
@@ -70,7 +71,7 @@
 
 .fase-item {
   font-family: "Open Sans";
-  font-size: 16px;
+  font-size: 24px;
   padding: 10px;
   border-width: 0;
   border-bottom: 4px solid #572b0c;
