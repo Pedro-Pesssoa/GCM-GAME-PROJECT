@@ -196,7 +196,9 @@ copy .env.example .env  # Windows
 O arquivo `.env` contém:
 - `SECRET_KEY`: Chave secreta do Django (já configurada para desenvolvimento)
 - `DEBUG`: Modo debug (True para desenvolvimento)
+- `USE_POSTGRESQL`: Define se usa PostgreSQL (False = SQLite por padrão)
 
+> ✨ **Banco de Dados**: Por padrão o projeto usa **SQLite** (sem configuração necessária)
 > ⚠️ **Produção**: Gere uma SECRET_KEY única em https://djecrety.ir/
 
 #### 6. Configure o banco de dados
@@ -359,7 +361,7 @@ CORS_ALLOWED_ORIGINS = [
 
 ---
 
-### ❌ "SECRET_KEY not found"
+### ❌ "SECRET_KEY not found" ou "DB_NAME not found"
 
 **Causa**: Arquivo `.env` não existe ou está configurado incorretamente
 
@@ -371,13 +373,16 @@ cd backend
 copy .env.example .env  # Windows
 cp .env.example .env    # Linux/macOS
 
-# Ou crie manualmente com o seguinte conteúdo:
+# O arquivo .env padrão usa SQLite (sem necessidade de configurar DB)
+# Conteúdo mínimo:
 # DEBUG=True
 # SECRET_KEY=django-insecure-dev-key-change-in-production-a8f7g9h2j4k6l8m0n2p4q6r8s0t2u4v6w8x0y2z4
 
 # Execute as migrações novamente
 python manage.py migrate
 ```
+
+> 💡 **Dica**: O projeto usa SQLite por padrão. Só configure PostgreSQL se realmente precisar!
 
 ---
 

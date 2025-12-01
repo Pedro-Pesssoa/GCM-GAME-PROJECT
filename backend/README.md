@@ -177,13 +177,36 @@ SECRET_KEY=django-insecure-dev-key-change-in-production-a8f7g9h2j4k6l8m0n2p4q6r8
 # Modo de debug (True para desenvolvimento, False para produção)
 DEBUG=True
 
-# Configurações do PostgreSQL (opcional - SQLite é usado por padrão)
+# Banco de Dados (SQLite por padrão - sem configuração necessária)
+# Para usar PostgreSQL, descomente as linhas abaixo:
+# USE_POSTGRESQL=True
 # DB_NAME=quizplanet
 # DB_USER=postgres
 # DB_PASSWORD=sua_senha_aqui
 # DB_HOST=localhost
 # DB_PORT=5432
 ```
+
+### 🗄️ SQLite vs PostgreSQL
+
+**SQLite (Padrão)**:
+- ✅ Sem configuração necessária
+- ✅ Arquivo único `db.sqlite3`
+- ✅ Ideal para desenvolvimento
+- ✅ Funciona imediatamente
+
+**PostgreSQL (Opcional)**:
+- 🔧 Requer instalação do PostgreSQL
+- 🔧 Requer configuração no `.env`
+- 🔧 Requer `pip install -r requirements-postgres.txt`
+- ⚙️ Recomendado para produção
+
+Para ativar PostgreSQL:
+1. Instale o PostgreSQL
+2. Crie o banco de dados
+3. Instale dependências: `pip install -r requirements-postgres.txt`
+4. Configure `USE_POSTGRESQL=True` no `.env`
+5. Configure as credenciais (DB_NAME, DB_USER, etc.)
 
 > ⚠️ **Produção**: Gere uma SECRET_KEY única em https://djecrety.ir/
 > ⚠️ **Segurança**: Nunca comite o arquivo `.env` no Git!
@@ -286,6 +309,13 @@ Django>=4.2.0
 djangorestframework
 django-cors-headers
 djangorestframework-simplejwt
+python-decouple
+```
+
+### PostgreSQL (Opcional)
+Se quiser usar PostgreSQL em vez de SQLite:
+```bash
+pip install -r requirements-postgres.txt
 ```
 
 Instale com:

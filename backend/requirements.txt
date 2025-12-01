@@ -1,8 +1,10 @@
 Django>=4.2,<5.0
 djangorestframework
 djangorestframework-simplejwt
-psycopg2-binary
 python-decouple
 drf-yasg
 pytest
 pytest-django
+
+# Para usar PostgreSQL, instale também:
+# pip install psycopg2-binary
