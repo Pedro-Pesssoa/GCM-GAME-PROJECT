@@ -6,6 +6,8 @@
 backend/
 ├── manage.py                    # Gerenciador do Django
 ├── requirements.txt             # Dependências Python
+├── .env                         # Variáveis de ambiente (não versionado) ⚠️
+├── .env.example                 # Modelo de configurações
 ├── populate_perguntas.py        # Script opcional para popular DB manualmente
 ├── pytest.ini                   # Configuração de testes
 ├── db.sqlite3                   # Banco de dados SQLite (criado após migrate)
@@ -148,16 +150,43 @@ POST /api/progresso/resetar/          # Reseta progresso
 
 ## ⚙️ Configuração
 
-### Variáveis de Ambiente
+### Variáveis de Ambiente (.env)
 
-Crie um arquivo `.env` na pasta `backend/` (opcional):
+O arquivo `.env` é **obrigatório** e contém configurações sensíveis do Django.
+
+#### Criação Automática
+Se você usou os scripts de instalação (`install.sh` ou `install.bat`), o arquivo `.env` foi criado automaticamente a partir de `.env.example`.
+
+#### Criação Manual
+Se você instalou manualmente, copie o arquivo de exemplo:
+
+```bash
+# Linux/macOS
+cp .env.example .env
+
+# Windows
+copy .env.example .env
+```
+
+#### Conteúdo do .env
 
 ```env
-SECRET_KEY=sua-chave-secreta-aqui
+# Chave secreta do Django (já configurada para desenvolvimento)
+SECRET_KEY=django-insecure-dev-key-change-in-production-a8f7g9h2j4k6l8m0n2p4q6r8s0t2u4v6w8x0y2z4
+
+# Modo de debug (True para desenvolvimento, False para produção)
 DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
-CORS_ALLOWED_ORIGINS=http://localhost:3000
+
+# Configurações do PostgreSQL (opcional - SQLite é usado por padrão)
+# DB_NAME=quizplanet
+# DB_USER=postgres
+# DB_PASSWORD=sua_senha_aqui
+# DB_HOST=localhost
+# DB_PORT=5432
 ```
+
+> ⚠️ **Produção**: Gere uma SECRET_KEY única em https://djecrety.ir/
+> ⚠️ **Segurança**: Nunca comite o arquivo `.env` no Git!
 
 ### CORS
 
@@ -295,7 +324,15 @@ python manage.py showmigrations pergunta
 **Solução**: Verifique `CORS_ALLOWED_ORIGINS` em `settings.py`
 
 ### "Secret key not found"
-**Solução**: Django gera uma automaticamente, mas é recomendado usar .env
+**Solução**: Crie o arquivo `.env`
+```bash
+# Copie o arquivo de exemplo
+copy .env.example .env  # Windows
+cp .env.example .env    # Linux/macOS
+
+# Execute as migrações novamente
+python manage.py migrate
+```
 
 ---
 

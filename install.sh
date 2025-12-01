@@ -75,6 +75,15 @@ else
     exit 1
 fi
 
+# Cria arquivo .env se não existir
+if [ ! -f ".env" ]; then
+    echo "📄 Criando arquivo .env..."
+    cp .env.example .env
+    echo -e "${GREEN}✅ Arquivo .env criado com configurações padrão${NC}"
+else
+    echo -e "${GREEN}✅ Arquivo .env já existe${NC}"
+fi
+
 # Executa migrações
 echo "🗄️  Executando migrações do banco de dados..."
 python manage.py makemigrations

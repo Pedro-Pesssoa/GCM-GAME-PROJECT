@@ -75,6 +75,15 @@ if %errorlevel% neq 0 (
 )
 echo [OK] Dependencias Python instaladas
 
+REM Cria arquivo .env se nao existir
+if not exist ".env" (
+    echo Criando arquivo .env...
+    copy .env.example .env >nul 2>&1
+    echo [OK] Arquivo .env criado com configuracoes padrao
+) else (
+    echo [OK] Arquivo .env ja existe
+)
+
 REM Executa migracoes
 echo Executando migracoes do banco de dados...
 python manage.py makemigrations

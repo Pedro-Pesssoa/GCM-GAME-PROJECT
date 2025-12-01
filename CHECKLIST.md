@@ -38,6 +38,7 @@ Dependências esperadas:
 - [ ] Ambiente virtual `venv` foi criado em `backend/`
 - [ ] Ambiente virtual foi ativado (aparece `(venv)` no terminal)
 - [ ] Arquivo `requirements.txt` existe em `backend/`
+- [ ] Arquivo `.env` existe em `backend/` (criado automaticamente ou manualmente)
 - [ ] Todas as dependências foram instaladas com `pip install -r requirements.txt`
 
 **Verificação**:
@@ -182,6 +183,8 @@ Verifique se os seguintes arquivos/pastas existem:
 - [ ] `backend/venv/` (após criar ambiente virtual)
 - [ ] `backend/requirements.txt`
 - [ ] `backend/manage.py`
+- [ ] `backend/.env` (criado automaticamente ou manualmente)
+- [ ] `backend/.env.example` (modelo de configurações)
 - [ ] `backend/db.sqlite3` (após migrate)
 - [ ] `backend/accounts/`
 - [ ] `backend/pergunta/`
@@ -227,6 +230,12 @@ python manage.py test
 - [ ] Executou as migrações?
 - [ ] Banco de dados existe?
 - [ ] Arquivo `db.sqlite3` tem permissões corretas?
+- [ ] Arquivo `.env` está configurado corretamente?
+
+### ❌ "SECRET_KEY not found"
+- [ ] Arquivo `.env` existe em `backend/`?
+- [ ] Se não existe, copie de `.env.example`: `copy .env.example .env` (Windows) ou `cp .env.example .env` (Linux/macOS)
+- [ ] Execute as migrações novamente após criar o `.env`
 
 ---
 

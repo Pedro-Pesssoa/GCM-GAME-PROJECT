@@ -112,6 +112,7 @@ O script irá:
 - ✅ Instalar dependências do frontend (npm install)
 - ✅ Criar ambiente virtual Python
 - ✅ Instalar dependências do backend (pip install)
+- ✅ Criar arquivo `.env` com configurações padrão
 - ✅ Executar migrações do banco de dados
 - ✅ Inserir 25 perguntas automaticamente
 
@@ -181,7 +182,24 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-#### 5. Configure o banco de dados
+#### 5. Configure o arquivo .env
+
+**Se usou o script de instalação**, o arquivo `.env` já foi criado automaticamente.
+
+**Se está instalando manualmente**:
+```bash
+# Copie o arquivo de exemplo
+cp .env.example .env  # Linux/macOS
+copy .env.example .env  # Windows
+```
+
+O arquivo `.env` contém:
+- `SECRET_KEY`: Chave secreta do Django (já configurada para desenvolvimento)
+- `DEBUG`: Modo debug (True para desenvolvimento)
+
+> ⚠️ **Produção**: Gere uma SECRET_KEY única em https://djecrety.ir/
+
+#### 6. Configure o banco de dados
 ```bash
 python manage.py makemigrations
 python manage.py migrate
@@ -189,12 +207,12 @@ python manage.py migrate
 
 > ✨ **As 25 perguntas são inseridas automaticamente durante o migrate!**
 
-#### 6. (Opcional) Crie um superusuário
+#### 7. (Opcional) Crie um superusuário
 ```bash
 python manage.py createsuperuser
 ```
 
-#### 7. Inicie o servidor
+#### 8. Inicie o servidor
 ```bash
 python manage.py runserver
 ```
@@ -341,6 +359,28 @@ CORS_ALLOWED_ORIGINS = [
 
 ---
 
+### ❌ "SECRET_KEY not found"
+
+**Causa**: Arquivo `.env` não existe ou está configurado incorretamente
+
+**Solução**:
+```bash
+cd backend
+
+# Crie o arquivo .env a partir do exemplo
+copy .env.example .env  # Windows
+cp .env.example .env    # Linux/macOS
+
+# Ou crie manualmente com o seguinte conteúdo:
+# DEBUG=True
+# SECRET_KEY=django-insecure-dev-key-change-in-production-a8f7g9h2j4k6l8m0n2p4q6r8s0t2u4v6w8x0y2z4
+
+# Execute as migrações novamente
+python manage.py migrate
+```
+
+---
+
 ### ❌ "No module named 'django'"
 
 **Causa**: Ambiente virtual não ativado
@@ -433,6 +473,8 @@ GCM-GAME-PROJECT/
 │   ├── 📁 venv/                     # Ambiente virtual (ignorado)
 │   ├── 📄 manage.py                 # CLI do Django
 │   ├── 📄 requirements.txt          # Dependências Python
+│   ├── 📄 .env                      # Configurações (ignorado) ⚠️
+│   ├── 📄 .env.example              # Modelo de configurações
 │   ├── 📄 db.sqlite3                # Banco de dados (gerado)
 │   ├── 📁 accounts/                 # App de autenticação
 │   ├── 📁 pergunta/                 # App de perguntas
@@ -476,10 +518,11 @@ GCM-GAME-PROJECT/
 
 1. ✅ **Sempre ative o ambiente virtual** antes de trabalhar no backend
 2. ✅ **Mantenha 2 terminais abertos**: backend + frontend
-3. ✅ **Não comite** `node_modules/`, `venv/` ou `db.sqlite3`
+3. ✅ **Não comite** `node_modules/`, `venv/`, `db.sqlite3` ou `.env`
 4. ✅ **Execute `npm install`** após fazer pull de novas mudanças
 5. ✅ **Execute migrações** após atualizar models do Django
 6. ✅ **Consulte o CHECKLIST.md** para verificação pós-instalação
+7. ✅ **Arquivo `.env` é criado automaticamente** pelos scripts de instalação
 
 ---
 
