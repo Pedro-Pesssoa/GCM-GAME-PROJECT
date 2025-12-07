@@ -11,8 +11,25 @@ import Fases from "./components/Fases";
 import QuizDaFase from "./components/QuizDaFase";
 import GameOver from "./components/GameOver";
 
+// Prints das telas
+import QP01 from "./screens/QP01_Login.png";
+import QP02 from "./screens/QP02_Criar_conta.png";
+import QP03 from "./screens/QP03_Menu.png";
+import QP04 from "./screens/QP04_Introducao.png";
+import QP05 from "./screens/QP05_Floresta.png";
+import QP06 from "./screens/QP06_Fases.png";
+import QP07 from "./screens/QP07_Pergunta.png";
+import QP08 from "./screens/QP08_Fase_concluida.png";
+import QP09 from "./screens/QP09_Estatisticas.png";
+
 // API
-import { getPerguntas, getProgresso, registrarAcerto, registrarErro, resetarProgresso } from "./api";
+import {
+  getPerguntas,
+  getProgresso,
+  registrarAcerto,
+  registrarErro,
+  resetarProgresso,
+} from "./api";
 
 // Constantes
 const QUESTOESPORFASE = 3;
@@ -35,14 +52,14 @@ function App() {
   // ------------------------------------
   const [currentScreen, setCurrentScreen] = useState(GAME_SCREENS.LOGIN);
   const [currentFaseId, setCurrentFaseId] = useState(1);
-  
+
   // ------------------------------------
   // 2. Estados de Perguntas (carregadas da API)
   // ------------------------------------
   const [perguntas, setPerguntas] = useState([]);
   const [isLoadingPerguntas, setIsLoadingPerguntas] = useState(true);
   const [errorPerguntas, setErrorPerguntas] = useState(null);
-  
+
   // ------------------------------------
   // 2.1. Estados de Progresso (carregados da API)
   // ------------------------------------
@@ -87,10 +104,12 @@ function App() {
       setProgresso(data);
       // Atualiza estados locais com dados do backend
       setScore(data.total_acertos * 10);
-      
+
       // Sincroniza fases completas com backend
       if (data.fases_concluidas) {
-        const fasesIds = Object.keys(data.fases_concluidas).map(id => parseInt(id));
+        const fasesIds = Object.keys(data.fases_concluidas).map((id) =>
+          parseInt(id)
+        );
         setFasesCompletas(fasesIds);
       }
       return data;
@@ -130,7 +149,7 @@ function App() {
   const handleFaseConcluida = async ({ acertos, total, faseId }) => {
     // Verifica se acertou TODAS as perguntas da fase (100%)
     const acertouTodas = acertos === total;
-    
+
     // Marca fase como completa APENAS se acertar 100%
     if (acertouTodas && !fasesCompletas.includes(faseId)) {
       const novasFasesCompletas = [...fasesCompletas, faseId];
@@ -259,14 +278,14 @@ function App() {
   // ------------------------------------
   // 9. Renderização Condicional
   // ------------------------------------
-  
+
   // Exibe loading enquanto carrega perguntas
   if (isLoadingPerguntas) {
     return (
       <div className="page">
         <Header />
         <div id="jogo" className="quiz-container">
-          <div style={{ textAlign: 'center', padding: '50px' }}>
+          <div style={{ textAlign: "center", padding: "50px" }}>
             <h2>Carregando perguntas...</h2>
             <p>Aguarde enquanto carregamos o conteúdo do jogo.</p>
           </div>
@@ -281,7 +300,7 @@ function App() {
       <div className="page">
         <Header />
         <div id="jogo" className="quiz-container">
-          <div style={{ textAlign: 'center', padding: '50px', color: 'red' }}>
+          <div style={{ textAlign: "center", padding: "50px", color: "red" }}>
             <h2>Erro ao carregar perguntas</h2>
             <p>{errorPerguntas}</p>
             <button onClick={() => window.location.reload()}>
@@ -308,8 +327,8 @@ function App() {
 
       case GAME_SCREENS.MENU:
         return (
-          <MenuGame 
-            novoJogo={handleNovoJogo} 
+          <MenuGame
+            novoJogo={handleNovoJogo}
             carregarJogo={handleCarregarJogo}
             telaLogin={handleBackToLogin}
             jogoIniciado={progresso?.jogo_iniciado || false}
@@ -419,6 +438,99 @@ function App() {
             Junte-se a nós nessa jornada. Descubra seu conhecimento, aprenda
             algo novo e ajude a espalhar a mensagem. O futuro do planeta está em
             nossas mãos!
+          </p>
+        </div>
+      </div>
+
+      <div id="interface-do-jogo" className="interface">
+        <h1>Interface do Jogo</h1>
+        <div className="descricao">
+          <h3>Login e Cadastro</h3>
+          <div className="game-screen">
+            <img src={QP01} alt="Tela de Login" />
+            <img src={QP02} alt="Tela de Cadastro" />
+          </div>
+          <p>
+            O jogo inicia com uma tela de login intuitiva onde jogadores já
+            cadastrados podem acessar suas contas. Para novos jogadores, há a
+            opção de criar uma conta através da tela de cadastro, onde é
+            possível registrar informações básicas e criar um perfil
+            personalizado. O sistema garante segurança e facilidade no acesso ao
+            jogo.
+          </p>
+          <h3>Menu</h3>
+          <div className="game-screen">
+            <img src={QP03} alt="Tela de Menu" />
+          </div>
+          <p>
+            O menu principal apresenta todas as opções disponíveis ao jogador de
+            forma organizada e acessível. Aqui é possível iniciar uma nova
+            partida, continuar uma partida já iniciada anteriormente e sair. A
+            interface foi projetada para proporcionar uma navegação fluida e
+            intuitiva entre as diferentes funcionalidades do jogo.
+          </p>
+          <h3>Introdução e Floresta</h3>
+          <div className="game-screen">
+            <img src={QP04} alt="Tela de Introdução" />
+            <img src={QP05} alt="Tela de Floresta" />
+          </div>
+          <p>
+            O jogo começa com uma tela de introdução que dá as boas-vindas ao
+            jogador e apresenta sua missão: ajudar a recuperar uma floresta
+            virtual usando conhecimentos sobre conservação ambiental. Nessa
+            tela, o jogador conhece as mecânicas básicas, perguntas de
+            Verdadeiro/Falso e múltipla escolha sobre temas como biodiversidade
+            e desertificação, e é informado de que o progresso será salvo
+            automaticamente. Um botão “Iniciar Jogo” convida a começar a
+            aventura ecológica.
+          </p>
+          <p>
+            A segunda tela mostra a floresta do jogador em seu estado inicial:
+            totalmente desmatada, com 25 espaços vazios. No topo, um painel
+            exibe estatísticas importantes, como o número de árvores plantadas,
+            a meta para vencer e o desempenho nas respostas. Botões como “Voltar
+            Menu” e “Fases” permitem navegar facilmente entre outras partes do
+            jogo.
+          </p>
+          <h3>Fases e Perguntas</h3>
+          <div className="game-screen">
+            <img src={QP06} alt="Tela de Fases" />
+            <img src={QP07} alt="Tela de Perguntas" />
+          </div>
+          <p>
+            O menu de seleção de fases exibe as 9 etapas do jogo organizadas em
+            uma grade 3x3, cada uma representada por um botão que o jogador pode
+            clicar para entrar na fase desejada. Na parte superior, a barra de
+            navegação mantém opções como “Voltar Menu”, o título “Fases” e um
+            atalho para retornar à tela da floresta.
+          </p>
+          <p>
+            Já a tela de gameplay mostra uma pergunta sobre os Objetivos de
+            Desenvolvimento Sustentável, especificamente o ODS 15. O jogador
+            deve escolher uma entre quatro alternativas. Depois de responder,
+            aparece um feedback dizendo “CORRETO!” junto de uma explicação
+            educativa. Um botão “Próxima Questão” permite continuar, enquanto um
+            indicador no topo mostra o progresso: “Fase 1 – Pergunta 1 de 3”.
+          </p>
+          <h3>Fase concluida e Estatísticas</h3>
+          <div className="game-screen">
+            <img src={QP08} alt="Tela de Fase concluída" />
+            <img src={QP09} alt="Tela de Estatisticas" />
+          </div>
+          <p>
+            A tela de resultado comemora a conclusão da Fase 1 com 100% de
+            acertos. Ela parabeniza o jogador, mostra o desempenho, 3 de 3
+            questões respondidas corretamente, e oferece duas escolhas: seguir
+            para a próxima fase ou refazer a atual para manter ou melhorar a
+            pontuação.
+          </p>
+          <p>
+            A segunda tela mostra a floresta atualizada após esse progresso.
+            Agora, 3 das 25 árvores foram plantadas, representando 12% de
+            recuperação do ambiente. As estatísticas também refletem o bom
+            desempenho: 3 acertos, nenhum erro e taxa de 100%. Esse avanço
+            visual incentiva o jogador a continuar respondendo corretamente para
+            restaurar toda a floresta virtual.
           </p>
         </div>
       </div>

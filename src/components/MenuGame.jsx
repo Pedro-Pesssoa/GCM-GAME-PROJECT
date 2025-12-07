@@ -28,7 +28,7 @@ const MenuGame = ({ novoJogo, carregarJogo, telaLogin, jogoIniciado }) => {
         onClick={handleCarregarJogo}
         className={!jogoIniciado ? "disabled" : ""}
       >
-        Carregar Jogo
+        Continuar Jogo
       </h3>
       <h3 onClick={telaLogin}>Sair</h3>
     </div>

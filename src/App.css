@@ -86,11 +86,62 @@ body {
   text-shadow: -2px -2px 4px #000;
 }
 
+.sobre h3 {
+  font-family: "HeroBump";
+  font-size: 1.5rem;
+  text-shadow: -2px -2px 4px #000;
+}
+
 .descricao {
   font-size: 1.3rem;
   margin: 0 auto;
   max-width: 1200px;
   text-align: justify;
+}
+
+/* ==========================
+   💻 Interface do Jogo
+========================== */
+.interface {
+  background-color: #3baa47;
+  border-top: 4px solid #c1deb5;
+  color: #fff;
+  padding: 20px;
+}
+
+.interface h1 {
+  font-family: "HeroBump";
+  font-size: 3rem;
+  text-align: center;
+  text-shadow: -2px -2px 4px #000;
+}
+
+.interface h3 {
+  font-family: "HeroBump";
+  font-size: 1.5rem;
+  text-shadow: -2px -2px 4px #000;
+}
+
+.game-screen {
+  width: 100%;
+  display: flex;
+  gap: 32px;
+  justify-content: space-around;
+}
+
+.game-screen img {
+  width: 25%;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.game-screen img:hover {
+  width: calc(50% * 0.8);
+  transform: scale(1.07);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* ==========================
