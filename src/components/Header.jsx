@@ -26,6 +26,7 @@ const Header = () => {
           <ul className="nav-list">
             <li><a href="/#jogo">Jogo</a></li>
             <li><a href="/#sobre-o-jogo">Sobre o Jogo</a></li>
+            <li><a href="/#interface-do-jogo">Interface</a></li>
             <li><a href="/#tecnologias">Tecnologias</a></li>
             <li><a href="/#desenvolvedores">Desenvolvedores</a></li>
           </ul>
