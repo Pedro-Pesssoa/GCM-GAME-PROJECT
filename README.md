@@ -602,6 +602,7 @@ Este projeto está sob a licença **MIT License**. Veja o arquivo [LICENSE](LICE
 ## 🔗 Documentação
 
 ### Documentação do Projeto
+- 📖 [Artigo]("O link do artigo vai aqui dentro dos parenteses")
 - 📋 [Requisitos do Jogo](https://docs.google.com/document/d/1lUXlBRyqNz9rVae9b8zsJsYV0vEYcgdMuAr1WiOTskY/edit?tab=t.0)
 - 🏗️ [Diagrama de Classes](https://docs.google.com/document/d/1yWixvAzlnHq2CHt0LwuWt3nCclA4Jcqk7iz9Stoy9oI/edit?tab=t.0)
 - 👤 [Diagrama de Caso de Uso](https://docs.google.com/document/d/1N6QFBOHwAw0s4N8kH5zivTLoxWTyY_rW6iF1yUaWBU8/edit?tab=t.0)
